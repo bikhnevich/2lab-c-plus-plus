@@ -1,0 +1,372 @@
+#include "pch.h"
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <Windows.H>
+
+using namespace std;
+
+struct customer {
+	string name;
+	string SecondName;
+	unsigned short weight;
+	unsigned short growth;
+	unsigned short BirthDate;
+	unsigned short mobileNuM;
+};
+
+void menu(customer *Array, int N);
+
+//Метод  ввода с проверкой вводимого 
+int readInt() {
+	unsigned short N;
+	while (!(cin >> N) || (cin.peek() != '\n')) {
+		cin.clear();
+		while (cin.get() != '\n');
+		cout << "Ошибка!Введите число - " << endl;
+	}
+	return N;
+}
+
+//Метод ввода с проверкой ,что вводимое число позитивное 
+int readPositiveInt() {
+	unsigned short N;
+	bool check = false;
+	unsigned short temp;
+	while (check == false) {
+		temp = readInt();
+		if (temp & (1U << (sizeof(temp) * 8 - 1))) {
+			cout << "Ошибка! Введите положительное число - ";
+		}
+		else {
+			N = temp;
+			check = true;
+		}
+	}
+	return N;
+}
+
+//Метод вывода отдельных структур массива
+void print(customer *Array, int N, int i) {
+	cout << setw(22 + Array[i].name.length()) << setfill('-') << '-' << ends << endl;
+	cout << "|Имя            | " << setw(Array[i].name.length()) << setfill(' ') << Array[i].name  << '|' << ends << endl;
+
+	cout << "|Фамилия         | " << setw(Array[i].name.length()) << setfill(' ') << Array[i].SecondName << '|' << ends << endl;
+
+	cout << "|Вес              | " << setw(Array[i].name.length()) << setfill(' ') << Array[i].weight << '|' << ends << endl;
+
+	cout << "|Рост            | " << setw(Array[i].name.length()) << setfill(' ') << Array[i].growth << '|' << ends << endl;
+
+	cout << "|Дата Рождения    | " << setw(Array[i].name.length()) << setfill(' ') << Array[i].BirthDate << '|' << ends << endl;
+
+	cout << "|Телефонный номер   | " << setw(Array[i].name.length()) << setfill(' ') << Array[i].mobileNuM << '|' << ends << endl;
+	cout << setw(22 + Array[i].name.length()) << setfill('-') << '-' << ends << endl;
+	cout << endl;
+}
+
+//Заполнение дин.массива
+void fillArray(customer *Array, int N) {
+	cin.ignore();
+	for (int i = 0; i < N; i++)
+	{
+		cout << endl << "Имя - ";
+		getline(cin, Array[i].name);
+		cout << "Фамилия- ";
+		getline(cin, Array[i].SecondName);
+		cout << "Вес  - ";
+		Array[i].weight = readPositiveInt();
+		cout << "Рост  - ";
+		Array[i].growth = readPositiveInt();
+		cout << "Дата Рождения - ";
+		Array[i].BirthDate = readPositiveInt();
+		cout << "Телефонный номер - ";
+		Array[i].mobileNuM = readPositiveInt();
+		cin.ignore();
+		cout << endl;
+	}
+	menu(Array, N);
+}
+
+//Сортировка массива по указанному параметру
+void sortByPresetField(customer *Array, int N) {
+	int choice;
+	cout << "Введите параметр по которому требуется отсортировать массив." <<
+		"\n 1. Телефонный номер" <<
+		"\n 2. Вес " <<
+		"\n 3. Рост " <<
+		"\n 4. Дата Рождения" << endl;
+	choice = readPositiveInt();
+	switch (choice) {
+	case 1:
+		for (int i = N - 1; i >= 0; i--) {
+			for (int j = 0; j < i; j++) {
+				if (Array[j].weight > Array[j + 1].weight) {
+					customer tmp = Array[j];
+					Array[j] = Array[j + 1];
+					Array[j + 1] = tmp;
+				}
+			}
+		}
+		cout << "------------------------" << endl;
+		cout << "| Массив отсортирован! |" << endl;
+		cout << "------------------------" << endl;
+		break;
+	case 2:
+		for (int i = N - 1; i >= 0; i--) {
+			for (int j = 0; j < i; j++) {
+				if (Array[j].growth > Array[j + 1].growth) {
+					customer tmp = Array[j];
+					Array[j] = Array[j + 1];
+					Array[j + 1] = tmp;
+				}
+			}
+		}
+		cout << "------------------------" << endl;
+		cout << "| Массив отсортирован! |" << endl;
+		cout << "------------------------" << endl;
+		break;
+	case 3:
+		for (int i = N - 1; i >= 0; i--) {
+			for (int j = 0; j < i; j++) {
+				if (Array[j].BirthDate > Array[j + 1].BirthDate) {
+					customer tmp = Array[j];
+					Array[j] = Array[j + 1];
+					Array[j + 1] = tmp;
+				}
+			}
+		}
+		cout << "------------------------" << endl;
+		cout << "| Массив отсортирован! |" << endl;
+		cout << "------------------------" << endl;
+		break;
+	case 4:
+		for (int i = N - 1; i >= 0; i--) {
+			for (int j = 0; j < i; j++) {
+				if (Array[j].mobileNuM > Array[j + 1].mobileNuM) {
+					customer tmp = Array[j];
+					Array[j] = Array[j + 1];
+					Array[j + 1] = tmp;
+				}
+			}
+		}
+		cout << "------------------------" << endl;
+		cout << "| Массив отсортирован! |" << endl;
+		cout << "------------------------" << endl;
+		break;
+	default:
+		break;
+	}
+
+
+	menu(Array, N);
+}
+
+//Вывод содержимого массива
+void displayArray(customer *Array, int N) {
+	cout << "\t\t\tВсе здания:" << endl;
+	for (int i = 0; i < N; i++) {
+		print(Array, N, i);
+	}
+	menu(Array, N);
+}
+
+//Поиск и вывод по значению из указаного поля
+void findByValueOfPresetField(customer *Array, int N) {
+	int choice;
+	cout << "Введите параметр по которому требуется найти структуру (структуры)." <<
+		"\n 1. Имя ." <<
+		"\n 2. Фамилия." <<
+		"\n 3. Вес." <<
+		"\n 4. Рост." <<
+		"\n 5. Дата Родления " <<
+		"\n 6. Телефонный номер" << endl;
+	choice = readPositiveInt();
+	cin.ignore();
+
+	string temp1;
+	int temp2;
+	bool check = false;
+
+	switch (choice) {
+	case 1:
+		cout << "Введите имя - ";
+		getline(cin, temp1);
+
+		for (int i = 0; i < N; i++)
+		{
+			if (temp1 == Array[i].name) {
+				print(Array, N, i);
+				check = true;
+			}
+			else
+				cout << "Покупателя с таким параметром нет!" << endl;
+		}
+		break;
+	case 2:
+		cout << "Введите Фамилию - ";
+		getline(cin, temp1);
+		for (int i = 0; i < N; i++)
+		{
+			if (temp1 == Array[i].SecondName) {
+				print(Array, N, i);
+				check = true;
+			}
+			else
+				cout << "Покупателя с такой фамилией нет!" << endl;
+		}
+		break;
+	case 3:
+		cout << "Введите Рост - ";
+		temp2 = readPositiveInt();
+		for (int i = 0; i < N; i++)
+		{
+			if (temp2 == Array[i].growth) {
+				print(Array, N, i);
+				check = true;
+			}
+			else
+				cout << "Покупателя с таким ростом нет !" << endl;
+		}
+		break;
+	case 4:
+		cout << "Введите Дату Рождения - ";
+		temp2 = readPositiveInt();
+		for (int i = 0; i < N; i++)
+		{
+			if (temp2 == Array[i].BirthDate) {
+				print(Array, N, i);
+				check = true;
+			}
+			else
+				cout << "Покупателя с такой датой нет!" << endl;
+		}
+		break;
+	case 5:
+		cout << "Введите Телефонный номер - ";
+		temp2 = readPositiveInt();
+		for (int i = 0; i < N; i++)
+		{
+			if (temp2 == Array[i].mobileNuM) {
+				print(Array, N, i);
+				check = true;
+			}
+			else
+				cout << "Покуптаеля с таким телефонным номером нет!" << endl;
+		}
+		break;
+	case 6:
+		cout << "Введите Вес - ";
+		temp2 = readPositiveInt();
+		for (int i = 0; i < N; i++)
+		{
+			if (temp2 == Array[i].weight) {
+				print(Array, N, i);
+				check = true;
+			}
+			else
+				cout << "Покупателя с таким весом нет!" << endl;
+		}
+		break;
+	default:
+		break;
+	}
+
+	menu(Array, N);
+}
+
+//Добавление в массив ещё одной структуры(структур)
+void pushBack(customer *&Array, int &N, int n) {
+	for (int i = 0; i < n; i++)
+	{
+		customer *newArray = new customer[N + 1];
+		cin.ignore();
+		for (int i = 0; i < N; i++)
+		{
+			newArray[i] = Array[i];
+			newArray[i].name = Array[i].name;
+			newArray[i].BirthDate = Array[i].BirthDate;
+			newArray[i].SecondName = Array[i].SecondName;
+			newArray[i].weight = Array[i].weight;
+			newArray[i].growth = Array[i].growth;
+			newArray[i].mobileNuM = Array[i].mobileNuM;
+		}
+
+		cout << endl << "Имя - ";
+		getline(cin, newArray[N].name);
+		cout << "Фамилия - ";
+		getline(cin, newArray[N].SecondName);
+		cout << "Вес - ";
+		newArray[N].weight = readPositiveInt();
+		cout << "Рост - ";
+		newArray[N].growth = readPositiveInt();
+		cout << "Дата Рождения - ";
+		newArray[N].BirthDate = readPositiveInt();
+		cout << "Телефонный номер - ";
+		newArray[N].mobileNuM = readPositiveInt();
+		cin.ignore();
+		cout << endl;
+		N++;
+
+		delete[] Array;
+		Array = newArray;
+	}
+	menu(Array, N);
+}
+
+//Меню
+void menu(customer *Array, int N) {
+
+	cout << "\n Что сделать? \n\t 1. Заполнить массив." <<
+		"\n\t 2. Вывести массив на экран. " <<
+		"\n\t 3. Добавить в массив ещё здания " <<
+		"\n\t 4. Отсортировать по выбраному параметру." <<
+		"\n\t 5. Поиск и вывод по заданому значению поля." <<
+		"\n\t 6. Закончить работу. \n - ";
+	int check;
+	check = readPositiveInt();
+
+	switch (check) {
+	case 1:
+
+		fillArray(Array, N);
+		break;
+	case 2:
+		displayArray(Array, N);
+		break;
+	case 3:
+		cout << "Введите кол-во Покупателей, которые нужно добавить - ";
+		int n;
+		n = readPositiveInt();
+		pushBack(Array, N, n);
+		break;
+	case 4:
+		sortByPresetField(Array, N);
+		break;
+	case 5:
+		findByValueOfPresetField(Array, N);
+		break;
+	case 6:
+		delete[] Array;
+		break;
+	default:
+		break;
+	}
+}
+
+int main()
+{
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	
+
+	unsigned short N;
+
+	cout << "Введите кол-во Покупателей - ";
+	N = readPositiveInt();
+	cin.ignore();
+
+	customer *buyers = new customer[N];
+	menu(buyers, N);
+
+	return 0;
+}
